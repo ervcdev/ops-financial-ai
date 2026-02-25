@@ -41,7 +41,9 @@ export default function DashboardPage() {
       }
 
       if (!ventasData || ventasData.length === 0) {
-        throw new Error('No se encontraron datos de ventas. Sube un archivo CSV primero.')
+        setError('empty')
+        setLoading(false)
+        return
       }
 
       // Calcular resumen de los datos de ventas
@@ -98,10 +100,33 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-          <p className="text-gray-600">Cargando análisis...</p>
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-4 text-indigo-500" />
+          <p className="text-slate-300">Cargando análisis...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error === 'empty') {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+        <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-lg p-8 max-w-md text-center">
+          <div className="mb-6">
+            <div className="bg-slate-800 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <ArrowLeft className="h-8 w-8 text-slate-400" />
+            </div>
+            <h2 className="text-xl font-semibold text-slate-200 mb-2">No hay datos disponibles</h2>
+            <p className="text-slate-400">
+              Parece que aún no has subido ningún archivo CSV. ¡Comienza cargando tus datos de ventas!
+            </p>
+          </div>
+          <Link href="/upload">
+            <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white">
+              Subir mi primer archivo
+            </Button>
+          </Link>
         </div>
       </div>
     )
@@ -109,27 +134,28 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle className="text-red-600">Error</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-gray-600">{error}</p>
-            <div className="flex gap-2">
-              <Button onClick={fetchAnalysisData} variant="outline">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Reintentar
-              </Button>
-              <Link href="/upload">
-                <Button variant="outline">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Volver
-                </Button>
-              </Link>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+        <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-lg p-8 max-w-md">
+          <div className="text-center mb-6">
+            <div className="bg-red-950/50 border border-red-800 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <RefreshCw className="h-8 w-8 text-red-400" />
             </div>
-          </CardContent>
-        </Card>
+            <h2 className="text-xl font-semibold text-slate-200 mb-2">Error al cargar datos</h2>
+            <p className="text-slate-400">{error}</p>
+          </div>
+          <div className="flex gap-2">
+            <Button onClick={fetchAnalysisData} variant="outline" className="flex-1 border-slate-700 text-slate-300 hover:bg-slate-800">
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Reintentar
+            </Button>
+            <Link href="/upload" className="flex-1">
+              <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:bg-slate-800">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Volver
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
     )
   }
@@ -159,18 +185,36 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b">
+    <div className="min-h-screen bg-slate-950">
+      <div className="bg-slate-900/50 border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-semibold text-gray-900">Resiliencia Ops</h1>
+            <h1 className="text-xl font-semibold text-slate-100">Dashboard Financiero</h1>
             <div className="flex gap-2">
-              <Button onClick={fetchAnalysisData} variant="outline" size="sm">
+              <Button 
+                onClick={() => window.print()} 
+                variant="outline" 
+                size="sm"
+                className="border-slate-700 text-slate-300 hover:bg-slate-800"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Exportar PDF
+              </Button>
+              <Button 
+                onClick={fetchAnalysisData} 
+                variant="outline" 
+                size="sm"
+                className="border-slate-700 text-slate-300 hover:bg-slate-800"
+              >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Actualizar
               </Button>
               <Link href="/upload">
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  className="border-slate-700 text-slate-300 hover:bg-slate-800"
+                >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Nuevo Análisis
                 </Button>

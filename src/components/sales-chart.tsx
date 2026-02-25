@@ -11,26 +11,34 @@ interface SalesChartProps {
 }
 
 export function SalesChart({ data }: SalesChartProps) {
-  // Preparar datos para gráfico temporal (por mes)
-  const monthlyData = data.reduce((acc: any, record) => {
-    const month = record.fecha.substring(0, 7) // YYYY-MM
-    if (!acc[month]) {
-      acc[month] = { month, revenue: 0, orders: 0 }
+  // Preparar datos para gráfico temporal (por día/semana)
+  const dailyData = data.reduce((acc: any, record) => {
+    const date = record.fecha // Usar fecha completa
+    if (!acc[date]) {
+      acc[date] = { date, revenue: 0, orders: 0 }
     }
-    acc[month].revenue += record.total
-    acc[month].orders += 1
+    acc[date].revenue += Number(record.total) || 0
+    acc[date].orders += 1
     return acc
   }, {})
 
-  const timeSeriesData = Object.values(monthlyData).sort((a: any, b: any) => a.month.localeCompare(b.month))
+  const timeSeriesData = Object.values(dailyData)
+    .sort((a: any, b: any) => a.date.localeCompare(b.date))
+    .map((item: any) => ({
+      ...item,
+      formattedDate: new Date(item.date).toLocaleDateString('es-ES', { 
+        day: '2-digit', 
+        month: 'short' 
+      })
+    }))
 
   // Preparar datos para gráfico de productos
   const productData = data.reduce((acc: any, record) => {
     if (!acc[record.producto]) {
       acc[record.producto] = { producto: record.producto, revenue: 0, quantity: 0 }
     }
-    acc[record.producto].revenue += record.total
-    acc[record.producto].quantity += record.cantidad
+    acc[record.producto].revenue += Number(record.total) || 0
+    acc[record.producto].quantity += Number(record.cantidad) || 0
     return acc
   }, {})
 
@@ -50,30 +58,23 @@ export function SalesChart({ data }: SalesChartProps) {
             <LineChart data={timeSeriesData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
-                dataKey="month" 
+                dataKey="formattedDate" 
                 tick={{ fontSize: 12 }}
-                tickFormatter={(value) => {
-                  const date = new Date(value + '-01')
-                  return date.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' })
-                }}
               />
               <YAxis 
                 tick={{ fontSize: 12 }}
                 tickFormatter={(value) => `€${(value / 1000).toFixed(0)}k`}
               />
               <Tooltip 
-                formatter={(value: number) => [formatCurrency(value), 'Ingresos']}
-                labelFormatter={(label) => {
-                  const date = new Date(label + '-01')
-                  return date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-                }}
+                formatter={(value: number | undefined) => [formatCurrency(value || 0), 'Ingresos']}
+                labelFormatter={(label) => label}
               />
               <Line 
                 type="monotone" 
                 dataKey="revenue" 
-                stroke="#2563eb" 
+                stroke="#6366f1" 
                 strokeWidth={2}
-                dot={{ fill: '#2563eb', strokeWidth: 2, r: 4 }}
+                dot={{ fill: '#6366f1', strokeWidth: 2, r: 4 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -88,6 +89,12 @@ export function SalesChart({ data }: SalesChartProps) {
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={topProducts} layout="horizontal">
+              <defs>
+                <linearGradient id="colorGradient" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.6}/>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 type="number"
@@ -98,14 +105,14 @@ export function SalesChart({ data }: SalesChartProps) {
                 type="category"
                 dataKey="producto" 
                 tick={{ fontSize: 10 }}
-                width={80}
+                width={100}
               />
               <Tooltip 
-                formatter={(value: number) => [formatCurrency(value), 'Ingresos']}
+                formatter={(value: number | undefined) => [formatCurrency(value || 0), 'Ingresos']}
               />
               <Bar 
                 dataKey="revenue" 
-                fill="#059669"
+                fill="url(#colorGradient)"
                 radius={[0, 4, 4, 0]}
               />
             </BarChart>

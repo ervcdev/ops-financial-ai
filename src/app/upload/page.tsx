@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Papa from 'papaparse'
 import { supabase } from '@/lib/supabase'
 import { Upload, FileText, AlertCircle, CheckCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface SalesRecord {
   fecha: string
@@ -68,8 +69,6 @@ export default function UploadPage() {
 
           setPreviewData(salesData.slice(0, 5))
 
-          // Debug: mostrar datos que se van a insertar
-          console.log('Datos a insertar:', salesData)
 
           // Insertar datos en Supabase
           const { data, error } = await supabase
@@ -88,6 +87,7 @@ export default function UploadPage() {
           }
 
           setUploadStatus('success')
+          toast.success(`¡Éxito! Se cargaron ${salesData.length} registros de ventas`)
           
           // Redirigir al dashboard después de un breve delay (sin fileId)
           setTimeout(() => {
@@ -96,7 +96,9 @@ export default function UploadPage() {
 
         } catch (error) {
           setUploadStatus('error')
-          setErrorMessage(error instanceof Error ? error.message : 'Error desconocido')
+          const errorMsg = error instanceof Error ? error.message : 'Error desconocido'
+          setErrorMessage(errorMsg)
+          toast.error(`Error: ${errorMsg}`)
         } finally {
           setIsUploading(false)
         }
@@ -130,29 +132,29 @@ export default function UploadPage() {
   }, [handleFileUpload])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+    <div className="min-h-screen bg-slate-950 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Resiliencia Ops
+          <h1 className="text-4xl font-bold text-slate-100 mb-4">
+            Subir Datos de Ventas
           </h1>
-          <p className="text-xl text-gray-600 mb-2">
-            Análisis Financiero Inteligente para Empresas Resilientes
+          <p className="text-xl text-slate-300 mb-2">
+            Carga tu archivo CSV para análisis financiero inteligente
           </p>
-          <p className="text-gray-500">
-            Sube tu archivo CSV con datos de ventas
+          <p className="text-slate-400">
+            Formato requerido: fecha, producto, cantidad, precio_unitario, total
           </p>
         </div>
 
         {/* Upload Area */}
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+        <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-lg p-8 mb-8">
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
             onDragEnter={(e) => e.preventDefault()}
             className={`
               border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-              ${uploadStatus === 'processing' ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+              ${uploadStatus === 'processing' ? 'border-indigo-400 bg-indigo-950/30' : 'border-slate-700 hover:border-slate-600'}
               ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
             `}
           >
@@ -165,11 +167,11 @@ export default function UploadPage() {
               disabled={isUploading}
             />
             <label htmlFor="csv-upload" className="cursor-pointer">
-              <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-600 mb-2">
+              <Upload className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+              <p className="text-slate-300 mb-2">
                 Arrastra y suelta tu archivo CSV aquí, o haz clic para seleccionar
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-slate-500">
                 Columnas requeridas: fecha, producto, cantidad, precio_unitario, total
               </p>
             </label>
@@ -177,14 +179,14 @@ export default function UploadPage() {
 
           {/* Status Messages */}
           {uploadStatus === 'processing' && (
-            <div className="flex items-center gap-2 text-blue-600 mt-4">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+            <div className="flex items-center gap-2 text-indigo-400 mt-4">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-400"></div>
               Procesando archivo y guardando en base de datos...
             </div>
           )}
 
           {uploadStatus === 'error' && (
-            <div className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg mt-4">
+            <div className="flex items-center gap-2 text-red-400 bg-red-950/30 border border-red-800 p-3 rounded-lg mt-4">
               <AlertCircle className="h-4 w-4" />
               {errorMessage}
             </div>
@@ -192,33 +194,33 @@ export default function UploadPage() {
 
           {uploadStatus === 'success' && (
             <div className="space-y-3 mt-4">
-              <div className="flex items-center gap-2 text-green-600 bg-green-50 p-3 rounded-lg">
+              <div className="flex items-center gap-2 text-green-400 bg-green-950/30 border border-green-800 p-3 rounded-lg">
                 <CheckCircle className="h-4 w-4" />
                 ¡Datos guardados exitosamente! Redirigiendo al dashboard...
               </div>
               
               {previewData.length > 0 && (
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-medium mb-2">Vista previa de los datos procesados:</h4>
+                <div className="bg-slate-800/50 border border-slate-700 p-4 rounded-lg">
+                  <h4 className="font-medium mb-2 text-slate-200">Vista previa de los datos procesados:</h4>
                   <div className="overflow-x-auto">
                     <table className="min-w-full text-sm">
                       <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-2">Fecha</th>
-                          <th className="text-left p-2">Producto</th>
-                          <th className="text-left p-2">Cantidad</th>
-                          <th className="text-left p-2">Precio</th>
-                          <th className="text-left p-2">Total</th>
+                        <tr className="border-b border-slate-700">
+                          <th className="text-left p-2 text-slate-300">Fecha</th>
+                          <th className="text-left p-2 text-slate-300">Producto</th>
+                          <th className="text-left p-2 text-slate-300">Cantidad</th>
+                          <th className="text-left p-2 text-slate-300">Precio</th>
+                          <th className="text-left p-2 text-slate-300">Total</th>
                         </tr>
                       </thead>
                       <tbody>
                         {previewData.map((row, index) => (
-                          <tr key={index} className="border-b">
-                            <td className="p-2">{row.fecha}</td>
-                            <td className="p-2">{row.producto}</td>
-                            <td className="p-2">{row.cantidad}</td>
-                            <td className="p-2">€{row.precio_unitario}</td>
-                            <td className="p-2">€{row.total}</td>
+                          <tr key={index} className="border-b border-slate-700">
+                            <td className="p-2 text-slate-400">{row.fecha}</td>
+                            <td className="p-2 text-slate-400">{row.producto}</td>
+                            <td className="p-2 text-slate-400">{row.cantidad}</td>
+                            <td className="p-2 text-slate-400">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(row.precio_unitario)}</td>
+                            <td className="p-2 text-slate-400">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(row.total)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -232,26 +234,26 @@ export default function UploadPage() {
 
         {/* Info Cards */}
         <div className="grid md:grid-cols-3 gap-6 text-center">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <FileText className="h-8 w-8 text-blue-600 mx-auto mb-3" />
-            <h3 className="font-semibold mb-2">Formato CSV</h3>
-            <p className="text-sm text-gray-600">
+          <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 p-6 rounded-lg">
+            <FileText className="h-8 w-8 text-indigo-400 mx-auto mb-3" />
+            <h3 className="font-semibold mb-2 text-slate-200">Formato CSV</h3>
+            <p className="text-sm text-slate-400">
               Asegúrate de que tu archivo tenga las columnas requeridas
             </p>
           </div>
           
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-3" />
-            <h3 className="font-semibold mb-2">Validación</h3>
-            <p className="text-sm text-gray-600">
+          <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 p-6 rounded-lg">
+            <CheckCircle className="h-8 w-8 text-green-400 mx-auto mb-3" />
+            <h3 className="font-semibold mb-2 text-slate-200">Validación</h3>
+            <p className="text-sm text-slate-400">
               Validamos automáticamente la estructura y los datos
             </p>
           </div>
           
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <Upload className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-            <h3 className="font-semibold mb-2">Base de Datos</h3>
-            <p className="text-sm text-gray-600">
+          <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 p-6 rounded-lg">
+            <Upload className="h-8 w-8 text-indigo-500 mx-auto mb-3" />
+            <h3 className="font-semibold mb-2 text-slate-200">Base de Datos</h3>
+            <p className="text-sm text-slate-400">
               Los datos se guardan de forma segura en Supabase
             </p>
           </div>

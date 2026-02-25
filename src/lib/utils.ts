@@ -5,7 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number): string {
+export function formatCurrency(amount: number | undefined): string {
+  if (amount === undefined || amount === null || isNaN(amount)) {
+    return '€0,00'
+  }
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR'
