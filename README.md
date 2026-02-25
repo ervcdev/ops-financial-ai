@@ -1,6 +1,8 @@
 # Resiliencia Ops - Análisis Financiero con IA
 
 Una plataforma de análisis financiero inteligente que ayuda a las empresas a ser más resilientes mediante insights accionables generados por IA.
+[![Platzi Challenge](https://img.shields.io/badge/Reto-Platzi-green?style=for-the-badge&logo=platzi)](https://platzi.com)
+[![Windsurf](https://img.shields.io/badge/Built%20with-Windsurf%20AI-blue?style=for-the-badge)](https://codeium.com/windsurf)
 
 ## 🚀 Características
 
