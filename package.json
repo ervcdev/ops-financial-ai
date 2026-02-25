@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.97.0",
+    "@types/react-dropzone": "^4.2.2",
     "ai": "^6.0.97",
     "clsx": "^2.1.1",
     "framer-motion": "^12.34.3",
@@ -20,6 +21,7 @@
     "papaparse": "^5.5.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-dropzone": "^15.0.0",
     "recharts": "^3.7.0",
     "tailwind-merge": "^3.5.0"
   },

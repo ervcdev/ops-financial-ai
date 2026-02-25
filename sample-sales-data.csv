@@ -1,0 +1,31 @@
+fecha,producto,cantidad,precio_unitario,total,cliente,categoria
+2024-01-15,Laptop Dell XPS 13,2,1200.00,2400.00,Empresa ABC,Tecnología
+2024-01-16,Mouse Inalámbrico,5,25.99,129.95,Oficina Central,Accesorios
+2024-01-18,Monitor 27 pulgadas,3,299.99,899.97,Startup Tech,Tecnología
+2024-01-20,Teclado Mecánico,4,89.99,359.96,Freelancer Pro,Accesorios
+2024-01-22,Webcam HD,8,45.50,364.00,Empresa ABC,Tecnología
+2024-01-25,Auriculares Bluetooth,6,79.99,479.94,Oficina Central,Accesorios
+2024-01-28,Tablet Samsung,2,350.00,700.00,Cliente Premium,Tecnología
+2024-02-02,Cable USB-C,15,12.99,194.85,Varios Clientes,Accesorios
+2024-02-05,Disco Duro Externo,4,120.00,480.00,Empresa ABC,Almacenamiento
+2024-02-08,Impresora Láser,1,450.00,450.00,Startup Tech,Oficina
+2024-02-12,Router WiFi 6,3,89.99,269.97,Oficina Central,Redes
+2024-02-15,Smartphone iPhone,2,899.00,1798.00,Cliente Premium,Tecnología
+2024-02-18,Cargador Portátil,10,29.99,299.90,Varios Clientes,Accesorios
+2024-02-22,SSD 1TB,5,149.99,749.95,Empresa ABC,Almacenamiento
+2024-02-25,Cámara Web 4K,2,199.99,399.98,Freelancer Pro,Tecnología
+2024-03-01,Memoria RAM 16GB,6,89.99,539.94,Startup Tech,Componentes
+2024-03-05,Procesador Intel i7,2,399.99,799.98,Cliente Premium,Componentes
+2024-03-08,Placa Base Gaming,1,249.99,249.99,Gamer Pro,Componentes
+2024-03-12,Tarjeta Gráfica RTX,1,699.99,699.99,Gamer Pro,Componentes
+2024-03-15,Fuente de Poder 750W,3,129.99,389.97,Varios Clientes,Componentes
+2024-03-18,Gabinete Gaming RGB,2,159.99,319.98,Gamer Pro,Componentes
+2024-03-22,Cooler CPU Líquido,1,89.99,89.99,Freelancer Pro,Componentes
+2024-03-25,Ventiladores RGB,8,19.99,159.92,Gamer Pro,Componentes
+2024-03-28,Pasta Térmica,12,8.99,107.88,Varios Clientes,Componentes
+2024-04-02,MacBook Pro M3,1,2499.00,2499.00,Cliente Premium,Tecnología
+2024-04-05,iPad Air,2,599.00,1198.00,Empresa ABC,Tecnología
+2024-04-08,Apple Watch,3,399.00,1197.00,Cliente Premium,Wearables
+2024-04-12,AirPods Pro,5,249.00,1245.00,Varios Clientes,Accesorios
+2024-04-15,Magic Keyboard,2,179.00,358.00,Freelancer Pro,Accesorios
+2024-04-18,Magic Mouse,4,99.00,396.00,Oficina Central,Accesorios
